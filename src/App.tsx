@@ -1,11 +1,11 @@
-import Table from "./container/Table";
+import UserTable from './UserTable'
 
 const App = () => {
   return (
     <>
-      <Table />
+    <UserTable/>
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App
