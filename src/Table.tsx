@@ -1,33 +1,83 @@
-import React from 'react';
-import TableHead from './TableHead';
-import TableBody from './TableBody';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { FaSortUp, FaSortDown } from 'react-icons/fa';
 
-
-interface TableProps {
-  sortUsers: (key: string, direction: 'asc' | 'desc') => void;
-  sortKey: string;
-  sortDirection: 'asc' | 'desc';
-  searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  username: string;
+  [key: string]: any; // Index signature
 }
 
-const Table: React.FC<TableProps> = ({ sortUsers, sortKey, sortDirection, searchTerm, setSearchTerm }) => (
-  <>
-<form
-  onSubmit={event => {
-    event.preventDefault();
-    const searchInput = event.currentTarget.getElementById('search') as HTMLInputElement;
-    setSearchTerm(searchInput.value); // access input element by ID
-  }}
->
-      <input name="search" />
-      <button type="submit">Search</button>
-    </form>
-    <table>
-      <TableHead sortUsers={sortUsers} sortKey={sortKey} sortDirection={sortDirection} />
-      <TableBody searchTerm={searchTerm} />
-    </table>
-  </>
-);
+const Table: React.FC = () => {
+  const [data, setData] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+    const [sortDirection, setSortDirection] = useState<{ [key: string]: 'asc' | 'desc' }>({});
+
+  const fetchData = async () => {
+    const response = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users');
+    setData(response.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []); // Only call fetchData once
+
+  const handleSearch = () => {
+    const filteredData = data.filter(user =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setData(filteredData);
+  };
+
+  const handleSort = (column: string) => {
+    const sortedData = [...data].sort((a, b) => {
+      if (a[column as keyof User] < b[column as keyof User]) {
+        return -1;
+      }
+      if (a[column as keyof User] > b[column as keyof User]) {
+        return 1;
+      }
+      return 0;
+    });
+    setData(sortedData);
+  };
+
+  return (
+    <div>
+      <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+      <button onClick={handleSearch}>Search</button>
+      <table>
+        <thead>
+          <tr>
+            <th onClick={() => handleSort('id')}>
+              ID {sortDirection.id === 'asc' ? <FaSortUp /> : <FaSortDown />}
+            </th>
+            <th onClick={() => handleSort('name')}>
+              Name {sortDirection.name === 'asc' ? <FaSortUp /> : <FaSortDown />}
+            </th>
+            <th onClick={() => handleSort('email')}>
+              Email {sortDirection.email === 'asc' ? <FaSortUp /> : <FaSortDown />}
+            </th>
+            <th onClick={() => handleSort('username')}>
+              Username {sortDirection.username === 'asc' ? <FaSortUp /> : <FaSortDown />}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map(user => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.username}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 export default Table;
