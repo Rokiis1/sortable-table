@@ -11,63 +11,74 @@ interface User {
 }
 
 const Table: React.FC = () => {
-  const [data, setData] = useState<User[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-    const [sortDirection, setSortDirection] = useState<{ [key: string]: 'asc' | 'desc' }>({});
-
-  const fetchData = async () => {
-    const response = await axios.get<User[]>('https://jsonplaceholder.typicode.com/users');
-    setData(response.data);
-  };
+  const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<keyof User | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
-    fetchData();
-  }, []); // Only call fetchData once
+    axios.get<User[]>('https://jsonplaceholder.typicode.com/users').then(response => {
+      setUsers(response.data);
+      setFilteredUsers(response.data);
+    });
+  }, []);
 
-  const handleSearch = () => {
-    const filteredData = data.filter(user =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setData(filteredData);
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+    setFilteredUsers(users.filter(user => user.name.toLowerCase().includes(event.target.value.toLowerCase())));
   };
 
   const handleSort = (column: string) => {
-    const sortedData = [...data].sort((a, b) => {
-      if (a[column as keyof User] < b[column as keyof User]) {
-        return -1;
-      }
-      if (a[column as keyof User] > b[column as keyof User]) {
-        return 1;
-      }
-      return 0;
-    });
-    setData(sortedData);
+    if (sort === null) {
+      setSort(column);
+      setSortDirection('asc');
+    } else if (sort === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSort(column);
+      setSortDirection('asc');
+    }
   };
+
+  const sortedData = filteredUsers.sort((a, b) => {
+    if (sortDirection === 'asc') {
+      return a[sort as keyof User] > b[sort as keyof User] ? 1 : -1;
+    } else {
+      return a[sort as keyof User] < b[sort as keyof User] ? 1 : -1;
+    }
+  });
 
   return (
     <div>
-      <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-      <button onClick={handleSearch}>Search</button>
+      <form>
+        <input type="text" placeholder="Search by name" value={search} onChange={handleSearch} />
+        <button type="submit">Search</button>
+      </form>
       <table>
         <thead>
           <tr>
             <th onClick={() => handleSort('id')}>
-              ID {sortDirection.id === 'asc' ? <FaSortUp /> : <FaSortDown />}
+              ID
+              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
             </th>
             <th onClick={() => handleSort('name')}>
-              Name {sortDirection.name === 'asc' ? <FaSortUp /> : <FaSortDown />}
+              Name
+              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
             </th>
             <th onClick={() => handleSort('email')}>
-              Email {sortDirection.email === 'asc' ? <FaSortUp /> : <FaSortDown />}
+              Email
+              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
             </th>
             <th onClick={() => handleSort('username')}>
-              Username {sortDirection.username === 'asc' ? <FaSortUp /> : <FaSortDown />}
+              Username
+              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
             </th>
           </tr>
         </thead>
         <tbody>
-          {data.map(user => (
-            <tr key={user.id}>
+          {sortedData.map(user => (
+            <tr key={user.id} className="visible">
               <td>{user.id}</td>
               <td>{user.name}</td>
               <td>{user.email}</td>
