@@ -50,7 +50,7 @@ const Table: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className="Application">
       <form>
         <input type="text" placeholder="Search by name" value={search} onChange={handleSearch} />
         <button type="submit">Search</button>
@@ -59,30 +59,38 @@ const Table: React.FC = () => {
         <thead>
           <tr>
             <th onClick={() => handleSort('id')}>
-              ID
-              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
+              <div className="sort-th">
+                <span>ID</span>
+                <span>{sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}</span>
+              </div>
             </th>
             <th onClick={() => handleSort('name')}>
-              Name
-              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
+              <div className="sort-th">
+                <span>Name</span>
+                <span>{sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}</span>
+              </div>
             </th>
-            <th onClick={() => handleSort('email')}>
-              Email
-              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
+            <th  onClick={() => handleSort('email')}>
+              <div className="sort-th">
+                <span>Email</span>
+                <span>{sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}</span>
+              </div>
             </th>
-            <th onClick={() => handleSort('username')}>
-              Username
-              {sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}
+            <th  onClick={() => handleSort('username')}>
+              <div className="sort-th">
+                <span>Username</span>
+                <span>{sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}</span>
+              </div>
             </th>
           </tr>
         </thead>
         <tbody>
           {sortedData.map(user => (
-            <tr key={user.id} className="visible">
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.username}</td>
+            <tr key={user.id}>
+              <td data-label="ID">{user.id}</td>
+              <td data-label="Name">{user.name}</td>
+              <td data-label="Email">{user.email}</td>
+              <td data-label="Username">{user.username}</td>
             </tr>
           ))}
         </tbody>
