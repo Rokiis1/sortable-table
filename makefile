@@ -7,8 +7,8 @@ start:
 lint:
 	pnpm run lint
 
-test:
-	pnpm run test
-
 build:
-	pnpm run build
+		#build container
+		docker build -t rokiis1/table .
+
+all: install lint deploy
