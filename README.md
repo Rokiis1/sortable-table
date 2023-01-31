@@ -1,1 +1,2 @@
+[![frontend CI/CD](https://github.com/Rokiis1/sortable-table/actions/workflows/fronted.yml/badge.svg)](https://github.com/Rokiis1/sortable-table/actions/workflows/fronted.yml)
 ![Python application test with Github Actions](https://codebuild.eu-west-2.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiYnVadGw0Q1ovN2ZmeWlVMXgyLzNqL3ZZSGhmNzZUZDVtNzUzMVU4WGVnZlBwMVpqTFFPTGFheEx1M3plaUdBbXVQVGxUT3lWQnNTRGE5NTJMNTJvTVdrPSIsIml2UGFyYW1ldGVyU3BlYyI6IndidUtmNGdFemNRTytzTVEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=main)
