@@ -1,14 +1,20 @@
 name: frontend CI/CD
-on: [push]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        react-version: 18.13.0
+        node-version: 18.x
     - name: Install pnpm
       run: |
         npm install -g pnpm
