@@ -82,7 +82,7 @@ const Table: React.FC = () => {
                                 <span>Username</span>
                                 <span>{sortDirection === 'asc' ? <FaSortUp /> : <FaSortDown />}</span>
                             </div>
-                        </th>s
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
