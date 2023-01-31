@@ -6,15 +6,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up React
-      uses: actions/setup-python@v1
+      uses: actions/setup-react@v1
       with:
         react-version: 18.0.22
     - name: Install dependencies
       run: |
-        make install
+        pnpm install
     - name: Lint with eslint
       run: |
-        make lint
+        pnpm run lint
     - name: Build Container
       run: |
-        make build
+        docker build -t rokiis1/table .

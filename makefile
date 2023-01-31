@@ -2,7 +2,7 @@ install:
 	pnpm install
 
 start:
-	pnpm run start
+	pnpm run dev
 
 lint:
 	pnpm run lint
