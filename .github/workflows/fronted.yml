@@ -5,10 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up React
-      uses: actions/setup-react@v1
+    - name: Set up Node.js
+      uses: actions/setup-node@v1
       with:
-        react-version: 18.0.22
+        react-version: 18.13.0
     - name: Install dependencies
       run: |
         pnpm install
