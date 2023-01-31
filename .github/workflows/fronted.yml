@@ -1,0 +1,20 @@
+name: frontend CI/CD
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up React
+      uses: actions/setup-python@v1
+      with:
+        react-version: 18.0.22
+    - name: Install dependencies
+      run: |
+        make install
+    - name: Lint with eslint
+      run: |
+        make lint
+    - name: Build Container
+      run: |
+        make build
